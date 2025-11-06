@@ -1,12 +1,20 @@
+using System;
 using UnityEngine;
 
 public class PlayerFirstPerson : MonoBehaviour
 {
 	[SerializeField] private float velocityMovement;
 	[SerializeField] private Transform cameraRef;
-	private float inputH;
-	private float inputV;
+	[SerializeField] private InputManagerSO inputManager;
+	private Vector3 moveDirection;
+	private Vector3 inputDirection;
 	private CharacterController controller;
+
+	private void OnEnable()
+	{
+		inputManager.OnJump += Jump;
+		inputManager.OnMove += Move;
+	}
 
 	void Start()
 	{
@@ -16,20 +24,26 @@ public class PlayerFirstPerson : MonoBehaviour
 
 	void Update()
 	{
-		inputH = Input.GetAxisRaw("Horizontal");
-		inputV = Input.GetAxisRaw("Vertical");
+		moveDirection = cameraRef.forward * inputDirection.z + cameraRef.right * inputDirection.x;
+		moveDirection.y = 0;
 
-		Vector3 moveDir = (cameraRef.forward * inputV + cameraRef.right * inputH).normalized;
-		moveDir.y = 0;
-
-		controller.Move(moveDir * velocityMovement * Time.deltaTime);
-
-		if (inputH != 0 && inputV != 0) RotateToDestination(moveDir);
+		controller.Move(moveDirection * velocityMovement * Time.deltaTime);
 	}
 
-	private void RotateToDestination(Vector3 destination)
+	private void RotateToDestination()
 	{
-		Quaternion rotateObjective = Quaternion.LookRotation(destination);
+		Quaternion rotateObjective = Quaternion.LookRotation(moveDirection);
 		this.transform.rotation = rotateObjective;
+	}
+
+	private void Move(Vector2 vector)
+	{
+		inputDirection = new Vector3(vector.x, 0, vector.y);
+		RotateToDestination();
+	}
+
+	private void Jump()
+	{
+		Debug.Log("El player salta");
 	}
 }
