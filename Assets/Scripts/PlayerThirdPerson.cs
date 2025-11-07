@@ -1,14 +1,26 @@
 using System;
 using UnityEngine;
 
-public class PlayerFirstPerson : MonoBehaviour
+public class PlayerThirdPerson : MonoBehaviour
 {
+	[Header("Player data")]
 	[SerializeField] private float velocityMovement;
+	[SerializeField] private float gravity;
 	[SerializeField] private Transform cameraRef;
 	[SerializeField] private InputManagerSO inputManager;
+	[SerializeField] private float heightJump;
+
+	[Header("Floor detection")]
+	[SerializeField] private Transform feets;
+	[SerializeField] private float radioDetection;
+	[SerializeField] private LayerMask floorMask;
+	
+	#region Private variables
 	private Vector3 moveDirection;
 	private Vector3 inputDirection;
+	private Vector3 verticalVelocity;
 	private CharacterController controller;
+	#endregion
 
 	private void OnEnable()
 	{
@@ -33,6 +45,28 @@ public class PlayerFirstPerson : MonoBehaviour
 		{
 			RotateToDestination();
 		}
+
+		//Si hemos aterrizado, reseteamos la velocidad en vertical
+		if(FloorDetection() && verticalVelocity.y < 0)
+		{
+			verticalVelocity.y = 0;
+
+			//Aqui resetamos los triggers
+			//anim.ResetTrigger("Jump");
+		}
+
+		ApplyGravity();
+	}
+
+	private void ApplyGravity()
+	{
+		verticalVelocity.y += gravity * Time.deltaTime;
+		controller.Move(verticalVelocity * Time.deltaTime);
+	}
+
+	private bool FloorDetection()
+	{
+		return Physics.CheckSphere(feets.position, radioDetection, floorMask);
 	}
 
 	private void RotateToDestination()
@@ -50,6 +84,14 @@ public class PlayerFirstPerson : MonoBehaviour
 
 	private void Jump()
 	{
-		Debug.Log("El player salta");
+		if (FloorDetection())
+		{
+			verticalVelocity.y = Mathf.Sqrt(-2 * gravity * heightJump);	
+		}
+	}
+
+	private void OrawGizmos()
+	{
+		Gizmos.DrawSphere(feets.position, radioDetection);		
 	}
 }
