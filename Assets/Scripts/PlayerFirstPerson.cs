@@ -28,10 +28,17 @@ public class PlayerFirstPerson : MonoBehaviour
 		moveDirection.y = 0;
 
 		controller.Move(moveDirection * velocityMovement * Time.deltaTime);
+
+		if (moveDirection.sqrMagnitude > 0)
+		{
+			RotateToDestination();
+		}
 	}
 
 	private void RotateToDestination()
 	{
+		Debug.Log("direction: " + moveDirection);
+
 		Quaternion rotateObjective = Quaternion.LookRotation(moveDirection);
 		this.transform.rotation = rotateObjective;
 	}
@@ -39,7 +46,6 @@ public class PlayerFirstPerson : MonoBehaviour
 	private void Move(Vector2 vector)
 	{
 		inputDirection = new Vector3(vector.x, 0, vector.y);
-		RotateToDestination();
 	}
 
 	private void Jump()
