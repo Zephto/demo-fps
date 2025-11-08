@@ -41,8 +41,13 @@ public class PlayerFirstPerson : MonoBehaviour
 
 		controller.Move(moveDirection * velocityMovement * Time.deltaTime);
 
+		if (moveDirection.sqrMagnitude > 0)
+		{
+			RotateToDestination();
+		}
+
 		//Si hemos aterrizado, reseteamos la velocidad en vertical
-		if(FloorDetection() && verticalVelocity.y < 0)
+		if (FloorDetection() && verticalVelocity.y < 0)
 		{
 			verticalVelocity.y = 0;
 		}
@@ -59,6 +64,12 @@ public class PlayerFirstPerson : MonoBehaviour
 	private bool FloorDetection()
 	{
 		return Physics.CheckSphere(feets.position, radioDetection, floorMask);
+	}
+
+	private void RotateToDestination()
+	{
+		Quaternion rotateObjective = Quaternion.LookRotation(moveDirection);
+		this.transform.rotation = rotateObjective;
 	}
 
 	private void Move(Vector2 vector)

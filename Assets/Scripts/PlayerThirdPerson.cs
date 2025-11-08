@@ -71,8 +71,6 @@ public class PlayerThirdPerson : MonoBehaviour
 
 	private void RotateToDestination()
 	{
-		Debug.Log("direction: " + moveDirection);
-
 		Quaternion rotateObjective = Quaternion.LookRotation(moveDirection);
 		this.transform.rotation = rotateObjective;
 	}
