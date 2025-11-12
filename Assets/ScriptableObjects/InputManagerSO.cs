@@ -9,6 +9,7 @@ public class InputManagerSO : ScriptableObject
 
 	public event Action OnJump;
 	public event Action<Vector2> OnMove;
+	public event Action OnShoot;
 
 	private void OnEnable()
 	{
@@ -17,6 +18,7 @@ public class InputManagerSO : ScriptableObject
 		myInputs.Player.Jump.started += Jump;
 		myInputs.Player.Move.performed += Move;
 		myInputs.Player.Move.canceled += Move;
+		myInputs.Player.Attack.started += Shoot;
 	}
 
 	private void Move(InputAction.CallbackContext context)
@@ -27,5 +29,10 @@ public class InputManagerSO : ScriptableObject
 	private void Jump(InputAction.CallbackContext context)
 	{
 		OnJump?.Invoke();
+	}
+
+	private void Shoot(InputAction.CallbackContext context)
+	{
+		OnShoot?.Invoke();
 	}
 }

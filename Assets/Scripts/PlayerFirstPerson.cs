@@ -20,12 +20,14 @@ public class PlayerFirstPerson : MonoBehaviour
 	private Vector3 inputDirection;
 	private Vector3 verticalVelocity;
 	private CharacterController controller;
+	private float shootDistance = 500;
 	#endregion
 
 	private void OnEnable()
 	{
 		inputManager.OnJump += Jump;
 		inputManager.OnMove += Move;
+		inputManager.OnShoot += Shoot;
 	}
 
 	void Start()
@@ -70,6 +72,20 @@ public class PlayerFirstPerson : MonoBehaviour
 	{
 		Quaternion rotateObjective = Quaternion.LookRotation(moveDirection);
 		this.transform.rotation = rotateObjective;
+	}
+
+	private void Shoot()
+	{
+		//Check if raycast with something
+		if (Physics.Raycast(cameraRef.position, cameraRef.forward, out RaycastHit hitInfo, shootDistance))
+		{
+
+			//Check if that something is damagable
+			if(hitInfo.transform.gameObject.TryGetComponent(out Damagable component))
+			{
+				component.GetDamage(50);
+			}
+		}
 	}
 
 	private void Move(Vector2 vector)
