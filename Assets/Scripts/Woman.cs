@@ -3,7 +3,7 @@ using UnityEngine;
 public class Woman : MonoBehaviour, Damagable
 {
 
-    private float life = 100;
+    [SerializeField] private float life = 100;
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()

@@ -1,4 +1,6 @@
 using System;
+using Unity.VisualScripting;
+using UnityEditor.Animations;
 using UnityEngine;
 
 public class PlayerFirstPerson : MonoBehaviour
@@ -9,6 +11,10 @@ public class PlayerFirstPerson : MonoBehaviour
 	[SerializeField] private Transform cameraRef;
 	[SerializeField] private InputManagerSO inputManager;
 	[SerializeField] private float heightJump;
+	
+	[Header("Animation references")]
+	[SerializeField] private Animator anim;
+	[SerializeField] private ParticleSystem shootParticles;
 
 	[Header("Floor detection")]
 	[SerializeField] private Transform feets;
@@ -76,6 +82,9 @@ public class PlayerFirstPerson : MonoBehaviour
 
 	private void Shoot()
 	{
+		anim.SetTrigger("Shoot");
+		shootParticles.Play();
+
 		//Check if raycast with something
 		if (Physics.Raycast(cameraRef.position, cameraRef.forward, out RaycastHit hitInfo, shootDistance))
 		{
