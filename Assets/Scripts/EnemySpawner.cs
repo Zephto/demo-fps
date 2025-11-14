@@ -33,7 +33,7 @@ public class EnemySpawner : MonoBehaviour
 			currentWave++;
 
 			int zombiesThisWave = Mathf.RoundToInt(initialZombiesPerWave * Mathf.Pow(difficultyMultiplier, currentWave - 1));
-			timeBetweenWaves += zombiesThisWave;
+			timeBetweenWaves += zombiesThisWave / 2;
 
 			Debug.Log("Ronda " + currentWave + " -- Total zombies: " + zombiesThisWave);
 
