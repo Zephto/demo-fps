@@ -106,6 +106,8 @@ public class PlayerFirstPerson : MonoBehaviour
 
 	private void Shoot()
 	{
+		if(!canMove) return;
+
 		anim.SetTrigger("Shoot");
 		shootParticles.Play();
 
