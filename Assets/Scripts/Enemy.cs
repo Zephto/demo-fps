@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour, Damagable
 	[SerializeField] private float radius;
 	[SerializeField] private float damage;
 	[SerializeField] private GameObject explosion;
+	[SerializeField] private Animator anim;
 
 	private NavMeshAgent agent;
 	private Woman target;
@@ -61,6 +62,8 @@ public class Enemy : MonoBehaviour, Damagable
 
 	private IEnumerator UpdateDestinationRoute()
 	{
+		anim.SetTrigger("Walk");
+
 		while (target != null)
 		{
 			Vector3 randomOffset = new Vector3(Random.Range(-5f, 5f), 0f, Random.Range(-5, 5f));
@@ -74,16 +77,20 @@ public class Enemy : MonoBehaviour, Damagable
 
 				Debug.Log("Estoy pa atacar");
 				PrepareToAttack();
+				anim.SetTrigger("Attack");
 
 				yield return new WaitForSeconds(0.3f);
 				Attack();
 
 				yield return new WaitForSeconds(1f);
 				agent.isStopped = false;
+
+				anim.SetTrigger("Walk");
 			}
 		}
 
 		Debug.Log("Se murio mi target jsjsj ganamos");
+		anim.SetTrigger("Dance");
 	}
 
 	public void GetDamage(float damage)
