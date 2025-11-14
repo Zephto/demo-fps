@@ -26,13 +26,17 @@ public class GameManager : MonoBehaviour
 		StartCoroutine(GameplayCinematic());
 
 		woman.OnDamage.AddListener((total, remaining)=>{
-			Debug.Log("Actualizar barraaaaa");
 			hud.UpdateHealthBar(total, remaining);
 			
 			if(remaining <= 0)
 			{
 				StartCoroutine(GameoverCinematic());
 			}
+		});
+
+		GlobalData.OnZombieKill.AddListener(()=> {
+			Debug.Log("Zombie matao");
+			zombieCounter++;
 		});
 	}
 
@@ -58,7 +62,7 @@ public class GameManager : MonoBehaviour
 		Cursor.lockState = CursorLockMode.None;
 		player.CanMove = false;
 
-		hud.ShowGameoverHUD();
+		hud.ShowGameoverHUD(zombieCounter);
 
 		yield return null;
 	}

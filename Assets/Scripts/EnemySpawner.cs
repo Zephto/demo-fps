@@ -9,7 +9,7 @@ public class EnemySpawner : MonoBehaviour
 	[SerializeField] private Transform[] spawnPoints;
 
 	[Header("Rounds")]
-	[SerializeField] private float timeBetweenWaves = 60f;
+	[SerializeField] private float timeBetweenWaves = 80f;
 	[SerializeField] private int initialZombiesPerWave = 5;
 	[SerializeField] private float difficultyMultiplier = 1.2f;
 
@@ -33,7 +33,7 @@ public class EnemySpawner : MonoBehaviour
 			currentWave++;
 
 			int zombiesThisWave = Mathf.RoundToInt(initialZombiesPerWave * Mathf.Pow(difficultyMultiplier, currentWave - 1));
-			timeBetweenWaves += zombiesThisWave / 2;
+			timeBetweenWaves += 5;
 
 			Debug.Log("Ronda " + currentWave + " -- Total zombies: " + zombiesThisWave);
 

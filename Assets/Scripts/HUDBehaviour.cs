@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class HUDBehaviour : MonoBehaviour
@@ -17,7 +18,7 @@ public class HUDBehaviour : MonoBehaviour
 	[SerializeField] private CanvasGroup canvasGameover;
 	[SerializeField] private TextMeshProUGUI finalText;
 	[SerializeField] private Button buttonPlayAgain;
-	[SerializeField] private Button buttonMainMenu;
+	// [SerializeField] private Button buttonMainMenu;
 	#endregion
 
 	private void Start() {
@@ -34,8 +35,12 @@ public class HUDBehaviour : MonoBehaviour
 		canvasGameover.blocksRaycasts = false;
 
 
-		buttonPlayAgain.onClick.AddListener(()=>{});
-		buttonMainMenu.onClick.AddListener(()=>{});
+		buttonPlayAgain.onClick.AddListener(() =>
+		{
+			Scene currentScene = SceneManager.GetActiveScene();
+			SceneManager.LoadScene(currentScene.name);
+		});
+		// buttonMainMenu.onClick.AddListener(()=>{});
 	}
 
 	#region Public methods
@@ -55,8 +60,10 @@ public class HUDBehaviour : MonoBehaviour
 		StartCoroutine(Fade(canvasGameplay, 1f, 0.3f));
 	}
 
-	public void ShowGameoverHUD()
+	public void ShowGameoverHUD(int zombieCounter)
 	{
+		finalText.text = "Total zombies killed: " + zombieCounter.ToString();
+
 		StartCoroutine(Fade(canvasGameplay, 0f, 0.3f));
 		StartCoroutine(Fade(canvasGameover, 1f, 0.3f));
 	}

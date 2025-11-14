@@ -99,6 +99,7 @@ public class Enemy : MonoBehaviour, Damagable
 
         if(life <= 0)
 		{
+			GlobalData.OnZombieKill?.Invoke();
 			Instantiate(explosion, this.transform.position, Quaternion.identity);
             Destroy(this.gameObject);
 		}
