@@ -21,6 +21,13 @@ public class InputManagerSO : ScriptableObject
 		myInputs.Player.Attack.started += Shoot;
 	}
 
+	private void OnDestroy() {
+		myInputs.Player.Jump.started -= Jump;
+		myInputs.Player.Move.performed -= Move;
+		myInputs.Player.Move.canceled -= Move;
+		myInputs.Player.Attack.started -= Shoot;
+	}
+
 	private void Move(InputAction.CallbackContext context)
 	{
 		OnMove?.Invoke(context.ReadValue<Vector2>());

@@ -1,16 +1,65 @@
+using System.Collections;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
-{
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+{   
+	#region Game References
+	[Header("Player references")]
+	[SerializeField] private Woman woman;
+	[SerializeField] private PlayerFirstPerson player;
+	
+	[Header("General references")]
+	[SerializeField] private EnemySpawner spawner;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	[Header("HUD reference")]
+	[SerializeField] private HUDBehaviour hud;
+	#endregion
+
+	#region Private variables
+	private int zombieCounter = 0;
+	#endregion
+
+	private void Start() {
+		zombieCounter = 0;
+		player.CanMove = false;
+
+		StartCoroutine(GameplayCinematic());
+
+		woman.OnDamage.AddListener((total, remaining)=>{
+			Debug.Log("Actualizar barraaaaa");
+			hud.UpdateHealthBar(total, remaining);
+			
+			if(remaining <= 0)
+			{
+				StartCoroutine(GameoverCinematic());
+			}
+		});
+	}
+
+	private IEnumerator GameplayCinematic()
+	{
+		Cursor.lockState = CursorLockMode.None;
+
+		hud.ShowInstructions(true);
+		yield return new WaitForSeconds(3f);
+		hud.ShowInstructions(false);
+
+		Cursor.lockState = CursorLockMode.Locked;
+		player.CanMove = true;
+
+		hud.ShowGameplayHUD();
+		yield return new WaitForSeconds(1f);
+
+		spawner.StartSpawn();
+	}
+
+	private IEnumerator GameoverCinematic()
+	{
+		Cursor.lockState = CursorLockMode.None;
+		player.CanMove = false;
+
+		hud.ShowGameoverHUD();
+
+		yield return null;
+	}
 }

@@ -1,10 +1,25 @@
 using System;
+using Unity.Cinemachine;
 using Unity.VisualScripting;
 using UnityEditor.Animations;
 using UnityEngine;
 
 public class PlayerFirstPerson : MonoBehaviour
 {
+	#region Properties
+	public bool CanMove
+	{
+		get => canMove;
+		set{
+			canMove = value;
+
+			cameraRef.GetComponent<CinemachineInputAxisController>().enabled = value;
+			Debug.Log("Se apago los inputs");
+		}
+	}
+	#endregion
+
+
 	[Header("Player data")]
 	[SerializeField] private float velocityMovement;
 	[SerializeField] private float gravity;
@@ -27,6 +42,7 @@ public class PlayerFirstPerson : MonoBehaviour
 	private Vector3 verticalVelocity;
 	private CharacterController controller;
 	private float shootDistance = 500;
+	private bool canMove = false;
 	#endregion
 
 	private void OnEnable()
@@ -36,14 +52,22 @@ public class PlayerFirstPerson : MonoBehaviour
 		inputManager.OnShoot += Shoot;
 	}
 
+	private void OnDestroy()
+	{
+		inputManager.OnJump -= Jump;
+		inputManager.OnMove -= Move;
+		inputManager.OnShoot -= Shoot;
+	}
+
 	void Start()
 	{
-		Cursor.lockState = CursorLockMode.Locked;
 		controller = GetComponent<CharacterController>();
 	}
 
 	void Update()
 	{
+		if(!canMove) return;
+
 		moveDirection = cameraRef.forward * inputDirection.z + cameraRef.right * inputDirection.x;
 		moveDirection.y = 0;
 
