@@ -110,6 +110,7 @@ public class PlayerFirstPerson : MonoBehaviour
 
 		anim.SetTrigger("Shoot");
 		shootParticles.Play();
+		GlobalData.OnPlayerShot?.Invoke();
 
 		//Check if raycast with something
 		if (Physics.Raycast(cameraRef.position, cameraRef.forward, out RaycastHit hitInfo, shootDistance))

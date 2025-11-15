@@ -7,6 +7,14 @@ public class GameManager : MonoBehaviour
 	[Header("Player references")]
 	[SerializeField] private Woman woman;
 	[SerializeField] private PlayerFirstPerson player;
+	[SerializeField] private ParticleSystem rain;
+
+	[Header("Music references")]
+	[SerializeField] private AudioManager audioManager;
+	[SerializeField] private AudioClip shootSound;
+	[SerializeField] private AudioClip music;
+	[SerializeField] private AudioClip itemSound;
+	[SerializeField] private AudioClip explosion;
 	
 	[Header("General references")]
 	[SerializeField] private EnemySpawner spawner;
@@ -22,11 +30,15 @@ public class GameManager : MonoBehaviour
 	private void Start() {
 		zombieCounter = 0;
 		player.CanMove = false;
+		audioManager.PlayMusic(music, 0.4f);
 
 		StartCoroutine(GameplayCinematic());
 
+		GlobalData.OnPlayerShot.AddListener(()=> audioManager.PlaySfx(shootSound, 0.25f));
+
 		woman.OnUpdateHealth.AddListener((total, remaining)=>{
 			hud.UpdateHealthBar(total, remaining);
+			audioManager.PlaySfx(itemSound, 1.2f);
 			
 			if(remaining <= 0)
 			{
@@ -35,8 +47,14 @@ public class GameManager : MonoBehaviour
 		});
 
 		GlobalData.OnZombieKill.AddListener(()=> {
-			Debug.Log("Zombie matao");
+			
+			audioManager.PlaySfx(explosion, 0.4f);
 			zombieCounter++;
+
+			if(zombieCounter == 20)
+			{
+				rain.Play();
+			}
 		});
 	}
 
