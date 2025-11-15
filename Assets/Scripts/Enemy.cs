@@ -11,6 +11,7 @@ public class Enemy : MonoBehaviour, Damagable
 	[SerializeField] private float damage;
 	[SerializeField] private GameObject explosion;
 	[SerializeField] private Animator anim;
+	[SerializeField] private GameObject[] itemsToSpawn;
 
 	private NavMeshAgent agent;
 	private Woman target;
@@ -99,6 +100,11 @@ public class Enemy : MonoBehaviour, Damagable
 
         if(life <= 0)
 		{
+			if(Random.value > 0.9)
+			{
+				Instantiate(itemsToSpawn[Random.Range(0, itemsToSpawn.Length)], this.transform.position, Quaternion.identity);
+			}
+
 			GlobalData.OnZombieKill?.Invoke();
 			Instantiate(explosion, this.transform.position, Quaternion.identity);
             Destroy(this.gameObject);

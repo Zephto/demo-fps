@@ -207,6 +207,8 @@ MonoBehaviour:
   damage: 20
   explosion: {fileID: 8464950693656172981, guid: 83ad694f134ab954580473212156b35a, type: 3}
   anim: {fileID: 4917265005782033052}
+  itemsToSpawn:
+  - {fileID: 6448351187796212702, guid: cf9f162a867d27e48ac125b24be26ae8, type: 3}
 --- !u!195 &3427813779599901652
 NavMeshAgent:
   m_ObjectHideFlags: 0

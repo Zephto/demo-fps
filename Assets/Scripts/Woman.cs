@@ -9,15 +9,22 @@ public class Woman : MonoBehaviour, Damagable
 	[SerializeField] private Animator anim;
 
 	#region Events
-	public UnityEvent<float, float> OnDamage = new UnityEvent<float, float>();
+	public UnityEvent<float, float> OnUpdateHealth = new UnityEvent<float, float>();
 	#endregion
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
 	{
 		remainingLife = totalLife;
-		OnDamage?.Invoke(totalLife, remainingLife);
+		OnUpdateHealth?.Invoke(totalLife, remainingLife);
 		anim.SetTrigger("Scary");
+
+		GlobalData.OnGrabHealth.AddListener((value) =>
+		{
+			remainingLife += value;
+			if(remainingLife > totalLife) remainingLife = totalLife;
+			OnUpdateHealth?.Invoke(totalLife, remainingLife);
+		});
 	}
 
 	// Update is called once per frame
@@ -29,7 +36,7 @@ public class Woman : MonoBehaviour, Damagable
 	public void GetDamage(float damage)
 	{
 		remainingLife -= damage;
-		OnDamage?.Invoke(totalLife, remainingLife);
+		OnUpdateHealth?.Invoke(totalLife, remainingLife);
 
 		if(remainingLife <= 0)
 		{

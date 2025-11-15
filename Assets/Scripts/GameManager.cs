@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
 
 		StartCoroutine(GameplayCinematic());
 
-		woman.OnDamage.AddListener((total, remaining)=>{
+		woman.OnUpdateHealth.AddListener((total, remaining)=>{
 			hud.UpdateHealthBar(total, remaining);
 			
 			if(remaining <= 0)

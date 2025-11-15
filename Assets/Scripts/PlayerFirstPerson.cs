@@ -140,4 +140,12 @@ public class PlayerFirstPerson : MonoBehaviour
 	{
 		Gizmos.DrawSphere(feets.position, radioDetection);		
 	}
+
+	private void OnTriggerEnter(Collider other) {
+		if (other.gameObject.CompareTag("Item"))
+		{
+			Destroy(other.gameObject);
+			GlobalData.OnGrabHealth?.Invoke(60);
+		}		
+	}
 }
