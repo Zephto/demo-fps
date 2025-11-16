@@ -1,7 +1,7 @@
 using System;
 using Unity.Cinemachine;
-using Unity.VisualScripting;
-using UnityEditor.Animations;
+// using Unity.VisualScripting;
+// using UnityEditor.Animations;
 using UnityEngine;
 
 public class PlayerFirstPerson : MonoBehaviour
